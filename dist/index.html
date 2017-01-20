@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="b1">
+    获取数据
+</button>
+<p id="r1"></p>
+<script>
+    document.getElementById('b1').addEventListener('click', function (e) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","/api/getList");
+        xhr.send();
+    })
+</script>
+<script type="text/javascript" src="main.7faf158593a7ac51d314.js"></script></body>
+</html>

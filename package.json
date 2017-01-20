@@ -1,0 +1,30 @@
+{
+  "name": "Mocker",
+  "version": "1.0.0",
+  "description": "A mock data management tool",
+  "main": "index.js",
+  "scripts": {
+    "dev": " NODE_ENV=development webpack-dev-server --config config/webpack.config.js",
+    "build": "NODE_ENV=production webpack --config config/webpack.config.js",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulShi666/Mocker.git"
+  },
+  "keywords": [
+    "mock",
+    "Http"
+  ],
+  "author": "Paul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulShi666/Mocker/issues"
+  },
+  "homepage": "https://github.com/PaulShi666/Mocker#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^2.26.0",
+    "webpack": "^2.2.0-rc.6",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
