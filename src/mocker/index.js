@@ -2,7 +2,9 @@
  * Created by mac on 17/1/17.
  */
 
+import * as npmPackage from '../../package.json';
 
+import mockerConfig from './config';
 //
 //
 // var _XMLHttpRequest = window.XMLHttpRequest;
@@ -26,10 +28,15 @@
 
 import {MockerHttpRequest} from './MockerHttpRequest';
 
-let d = new MockerHttpRequest();
-
 const mocker = {
-
+    config:mockerConfig,
+    version: npmPackage.version
 };
+if (window.XMLHttpRequest) {
+    window.XMLHttpRequest = MockerHttpRequest;
+}
+if (!window.mocker || window.mocker.version !== mocker.version) {
+    window.mocker = mocker;
+}
 
 export default mocker

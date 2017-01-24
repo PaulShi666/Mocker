@@ -10,14 +10,31 @@
 </button>
 <p id="r1"></p>
 <script>
-//    document.getElementById('b1').addEventListener('click', function (e) {
-//        var xhr = new XMLHttpRequest();
-//        xhr.open("GET","/api/getList");
-////        xhr.onload = function () {
-////          console.log(this);
-////        };
-//        //xhr.send();
-//    })
+    let target = {};
+    let p = new Proxy(target, {
+        get (){
+            console.log(arguments)
+        },
+        set (){
+            console.log(arguments)
+        }
+    });
+
+    p.a = 37; // 被转发到代理的操作
+
+    console.log(p); // 37. 操作已经被正确地转发
+
+    document.getElementById('b1').addEventListener('click', function (e) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange" , function () {
+            console.log(this);
+        });
+
+        xhr.open("GET","/api/getList");
+
+        xhr.send();
+    })
 </script>
 </body>
 </html>
