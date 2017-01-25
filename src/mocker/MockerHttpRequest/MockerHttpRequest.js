@@ -12,6 +12,10 @@ const _XMLHttpRequest = window.XMLHttpRequest;
 //保存原生ActiveXObject
 const _ActiveXObject = window.ActiveXObject;
 
+function resetXMLHttpRequest() {
+    window.XMLHttpRequest = _XMLHttpRequest;
+}
+
 //自定义XHR对象构造器
 function MockerHttpRequest() {
 
@@ -344,4 +348,6 @@ MockerHttpRequest.prototype = Object.create(
         , MockXMLHttpRequestEventTargetPrototype)
     , MockerHttpRequestPrototype);
 
-export {MockerHttpRequest};
+
+
+export {MockerHttpRequest,resetXMLHttpRequest};

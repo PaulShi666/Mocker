@@ -3,47 +3,34 @@
  */
 
 import * as npmPackage from '../../package.json';
-
 import mockerConfig from './config';
 
 import {createMockerDatabase, addMockerRecord} from './Data';
-//
-//
-// var _XMLHttpRequest = window.XMLHttpRequest;
-// var _xmlHttpRequest = new _XMLHttpRequest();
-// var isMock = true;
-//
-//
-//
-// window.XMLHttpRequest = MockerHttpRequest;
-//
-//
-// document.getElementById('b1').addEventListener('click', function (e) {
-//     var xhr = new XMLHttpRequest();
-//     xhr.open("GET", "/api/getList");
-//     xhr.onload = function () {
-//         console.log(this);
-//         document.getElementById('r1').innerText = this.responseText;
-//     };
-//     xhr.send();
-// });
-
-import {MockerHttpRequest} from './MockerHttpRequest';
+import {MockerHttpRequest, resetXMLHttpRequest} from './MockerHttpRequest';
 
 // 初始化Mocker
 const mocker = {
+    close: resetXMLHttpRequest,
     config: mockerConfig,
     version: npmPackage.version,
     mock: addMockerRecord
 };
+
+// 修改原生的XMLHttpRequest
 if (window.XMLHttpRequest) {
     window.XMLHttpRequest = MockerHttpRequest;
 }
+
+// 给window对象增加mocker接口
 if (!window.mocker || window.mocker.version !== mocker.version) {
     window.mocker = mocker;
 }
-//初始化Mocker对应数据库
-createMockerDatabase();
 
+//初始化Mocker对应数据库
+try {
+    createMockerDatabase();
+} catch (e) {
+    console.log(e);
+}
 
 export default mocker

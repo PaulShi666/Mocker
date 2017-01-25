@@ -27,12 +27,12 @@ function createMockerDatabase() {
             autoIncrement: true
         });
 
-        objectStore.createIndex("method", "method", {
-            unique: false
+        objectStore.createIndex("methodUrl", ["method", "url"], {
+            unique: true
         });
-        objectStore.createIndex("url", "url", {
-            unique: false
-        });
+        // objectStore.createIndex("url", "url", {
+        //     unique: false
+        // });
 
     }
 
@@ -43,17 +43,16 @@ function getMockerRecord(o) {
 
     let objectStore = db.transaction("records", "readonly").objectStore("records");
 
-
-    return new Promise(function(resolve,reject){
+    return new Promise(function (resolve, reject) {
 
         // 根据索引查询
-        objectStore.index('url').get(o.url).onsuccess = function(e) {
-            objectStore.index('method').get(o.method).onsuccess = function(e) {
-                resolve(e.target.result);
-            }
+        objectStore.index('methodUrl').get([o.method, o.url]).onsuccess = function (e) {
+            resolve(e.target.result);
+            // e.target.index('method').get(o.method).onsuccess = function(e) {
+            //     resolve(e.target.result);
+            // }
         }
     });
-
 
 
 }
@@ -65,7 +64,7 @@ function addMockerRecord(o) {
     let request = objectStore.add({
         "method": o.method,
         "url": o.url,
-        "response":o.response
+        "response": o.response
     });
     request.onsuccess = function () {
 
