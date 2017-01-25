@@ -5,6 +5,8 @@
 import * as npmPackage from '../../package.json';
 
 import mockerConfig from './config';
+
+import {createMockerDatabase, addMockerRecord} from './Data';
 //
 //
 // var _XMLHttpRequest = window.XMLHttpRequest;
@@ -28,9 +30,11 @@ import mockerConfig from './config';
 
 import {MockerHttpRequest} from './MockerHttpRequest';
 
+// 初始化Mocker
 const mocker = {
-    config:mockerConfig,
-    version: npmPackage.version
+    config: mockerConfig,
+    version: npmPackage.version,
+    mock: addMockerRecord
 };
 if (window.XMLHttpRequest) {
     window.XMLHttpRequest = MockerHttpRequest;
@@ -38,5 +42,8 @@ if (window.XMLHttpRequest) {
 if (!window.mocker || window.mocker.version !== mocker.version) {
     window.mocker = mocker;
 }
+//初始化Mocker对应数据库
+createMockerDatabase();
+
 
 export default mocker

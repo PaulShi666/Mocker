@@ -3,7 +3,10 @@
  */
 // MockerHttpRequest
 
+// 默认mock延迟时间
 export const MOCKERHTTPREQUEST_DELAY = 0;
+// 默认是否匹配到mock记录
+// export const MOCKERHTTPREQUEST_MATCH = false;
 
 export const XHR_EVENTS = {
     READYSTATECHANGE: "readystatechange",
@@ -59,3 +62,5 @@ export const HTTP_STATUS_CODES = {
     504: "Gateway Timeout",
     505: "HTTP Version Not Supported"
 };
+
+export const MOCKER_DATABASE_NAME = "MockerDatabase";

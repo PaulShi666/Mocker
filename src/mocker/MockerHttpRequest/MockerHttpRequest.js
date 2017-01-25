@@ -5,6 +5,7 @@
 import {createPrototypeChain, getVariableType} from '../util';
 import {XHR_EVENTS, HTTP_STATUS_CODES} from '../constant';
 import mockerConfig from '../config';
+import {getMockerRecord} from '../Data';
 
 //保存原生XMLHttpRequest
 const _XMLHttpRequest = window.XMLHttpRequest;
@@ -30,7 +31,10 @@ function MockerHttpRequest() {
         },
         config: {
             value: {
-                timeout: mockerConfig.timeout
+                timeout: mockerConfig.timeout,
+                // 数据库mock记录（延迟对象）
+                record: null
+                // match: mockerConfig.match
             }
         },
         onerror: {
@@ -60,10 +64,12 @@ function MockerHttpRequest() {
             writable: true
         },
         response: {
-            value: ''
+            value: '',
+            writable: true
         },
         responseText: {
-            value: ''
+            value: '',
+            writable: true
         },
         responseType: {
             value: ''
@@ -128,23 +134,40 @@ let MockerHttpRequestPrototype = {
         //推荐不要用箭头函数,词法作用域错误
         value: function (method, url, async, username, password) {
 
+
             // 序列化请求
-            let record = {
+            this.config.open = {
                 method: method,
                 url: url,
-                async: async || true,
+                async: typeof async === 'boolean' ? async : true,
                 username: username,
                 password: password
             };
 
+            let that = this;
 
-            //在Mock记录中查询到
-            this.readyState = MockerHttpRequestPrototype.OPENED.value;
+            //在Mock Indexdb记录中查询
+            this.config.record = find({method: method, url: url})
+                .then(function (item) {
 
-            this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+                    if (!item) {
+                        //在Mock记录中没有查询到
+                        //resolve(false);
+                        //that.config.match = false;
+
+                    } else {
+                        //在Mock记录中查询到
+                        //that.config.match = true;
+                        //resolve(true);
+                        //that.config.xhr = item;
+
+                        that.readyState = MockerHttpRequestPrototype.OPENED.value;
+                        that.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+                    }
+                    return item;
+                });
 
 
-            //在Mock记录中没有查询到
         }
     },
     overrideMimeType: {
@@ -159,30 +182,55 @@ let MockerHttpRequestPrototype = {
     responseXML: {},
     send: {
         value: function (data) {
+
+
             // 序列化请求
 
-            //在Mock记录中查询到
-            this.setRequestHeader('X-Requested-With', 'MockXMLHttpRequest');
+            let that = this;
 
-            this.dispatchEvent(new Event(XHR_EVENTS.LOADSTART));
+            this.config.record.then(function (item) {
+                //已经在open 时使用Mock Indexdb记录中查询
 
-            this.readyState = MockerHttpRequestPrototype.HEADERS_RECEIVED.value;
-            this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+                if (!item) {
+                    //在Mock记录中没有查询到
 
-            this.readyState = MockerHttpRequestPrototype.LOADING.value;
-            this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+                } else {
+                    //在Mock记录中查询到
+                    that.response = that.responseText = item.response;
 
-            this.status = 200;
+                    that.setRequestHeader('X-Requested-With', 'MockXMLHttpRequest');
+                    that.dispatchEvent(new Event(XHR_EVENTS.LOADSTART));
 
-            this.statusText = HTTP_STATUS_CODES[200];
+                    //使用settimeout模拟异步
+                    if (that.config.open.async === true) {
+                        window.setTimeout(done.bind(that), that.config.timeout);
+                    } else {
+                        done.call(that);
+                    }
 
-            this.readyState = MockerHttpRequestPrototype.DONE.value;
+                }
 
-            this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
-            this.dispatchEvent(new Event(XHR_EVENTS.LOAD));
-            this.dispatchEvent(new Event(XHR_EVENTS.LOADEND));
+            });
 
-            //在Mock记录中没有查询到
+
+            function done() {
+                this.readyState = MockerHttpRequestPrototype.HEADERS_RECEIVED.value;
+                this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+
+                this.readyState = MockerHttpRequestPrototype.LOADING.value;
+                this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+
+                this.status = 200;
+
+                this.statusText = HTTP_STATUS_CODES[200];
+
+                this.readyState = MockerHttpRequestPrototype.DONE.value;
+
+                this.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
+                this.dispatchEvent(new Event(XHR_EVENTS.LOAD));
+                this.dispatchEvent(new Event(XHR_EVENTS.LOADEND));
+
+            }
 
 
         }
@@ -190,10 +238,9 @@ let MockerHttpRequestPrototype = {
     setRequestHeader: {
         value: function (key, value) {
             if (key in this._requestHeader) {
-                this._requestHeader = ',' + value;
+                this._requestHeader[key] = ',' + value;
             } else {
-
-
+                this._requestHeader[key] = value;
             }
         }
     },
@@ -280,6 +327,9 @@ let MockEventTargetPrototype = {
         }
     }
 };
+function find(o) {
+    return getMockerRecord(o);
+}
 
 //MockerHttpRequest原型链模拟
 // MockerHttpRequest.prototype = createPrototypeChain(
