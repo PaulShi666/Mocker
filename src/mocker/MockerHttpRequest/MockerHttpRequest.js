@@ -21,8 +21,7 @@ function MockerHttpRequest() {
 
     Object.defineProperties(this, {
         _xmlHttpRequest: {
-            // value:new _XMLHttpRequest(arguments),
-            // writable: false,
+            writable: false,
             enumerable: false,
             configurable: false
         },
@@ -38,7 +37,6 @@ function MockerHttpRequest() {
                 timeout: mockerConfig.timeout,
                 // 数据库mock记录（延迟对象）
                 record: null
-                // match: mockerConfig.match
             }
         },
         onerror: {
@@ -101,7 +99,6 @@ function MockerHttpRequest() {
 
 }
 
-// MockerHttpRequest.prototype =
 let MockerHttpRequestPrototype = {
     constructor: {
         value: MockerHttpRequest
@@ -156,14 +153,10 @@ let MockerHttpRequestPrototype = {
 
                     if (!item) {
                         //在Mock记录中没有查询到
-                        //resolve(false);
-                        //that.config.match = false;
+
 
                     } else {
                         //在Mock记录中查询到
-                        //that.config.match = true;
-                        //resolve(true);
-                        //that.config.xhr = item;
 
                         that.readyState = MockerHttpRequestPrototype.OPENED.value;
                         that.dispatchEvent(new Event(XHR_EVENTS.READYSTATECHANGE));
@@ -197,7 +190,6 @@ let MockerHttpRequestPrototype = {
 
                 if (!item) {
                     //在Mock记录中没有查询到
-
                 } else {
                     //在Mock记录中查询到
                     that.response = that.responseText = item.response;
@@ -336,17 +328,12 @@ function find(o) {
 }
 
 //MockerHttpRequest原型链模拟
-// MockerHttpRequest.prototype = createPrototypeChain(
-//     MockerHttpRequestPrototype,
-//     MockXMLHttpRequestEventTargetPrototype,
-//     MockEventTargetPrototype
-// );
+MockerHttpRequest.prototype = createPrototypeChain(
+    MockerHttpRequestPrototype,
+    MockXMLHttpRequestEventTargetPrototype,
+    MockEventTargetPrototype
+);
 
-MockerHttpRequest.prototype = Object.create(
-    Object.create(
-        Object.create(Object.prototype, MockEventTargetPrototype)
-        , MockXMLHttpRequestEventTargetPrototype)
-    , MockerHttpRequestPrototype);
 
 
 

@@ -6,7 +6,6 @@
 // 默认mock延迟时间
 export const MOCKERHTTPREQUEST_DELAY = 0;
 // 默认是否匹配到mock记录
-// export const MOCKERHTTPREQUEST_MATCH = false;
 
 export const XHR_EVENTS = {
     READYSTATECHANGE: "readystatechange",

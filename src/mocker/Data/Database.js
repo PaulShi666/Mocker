@@ -30,9 +30,6 @@ function createMockerDatabase() {
         objectStore.createIndex("methodUrl", ["method", "url"], {
             unique: true
         });
-        // objectStore.createIndex("url", "url", {
-        //     unique: false
-        // });
 
     }
 
@@ -44,13 +41,9 @@ function getMockerRecord(o) {
     let objectStore = db.transaction("records", "readonly").objectStore("records");
 
     return new Promise(function (resolve, reject) {
-
         // 根据索引查询
         objectStore.index('methodUrl').get([o.method, o.url]).onsuccess = function (e) {
             resolve(e.target.result);
-            // e.target.index('method').get(o.method).onsuccess = function(e) {
-            //     resolve(e.target.result);
-            // }
         }
     });
 
@@ -84,10 +77,11 @@ function updateMockerRecord(o) {
 }
 
 function checkMockerRecord(o) {
+    // 检测输入参数
     if (!(typeof o === 'object' &&
         typeof o.method === 'string' &&
         typeof o.url === 'string' &&
-        /^(get)|(post)$/i.test(o.method))
+        /^(get|post)$/i.test(o.method))
     ) {
         throw new Error('数据库操作数据非法')
     }
