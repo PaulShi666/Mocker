@@ -5,6 +5,7 @@ Mocker is a simulation tool colletion to increase front-end developers' efficien
 Front-end developer can develop an application using Mocker without running bank-end service.
 
 The api document:<https://github.com/PaulShi666/Mocker/wiki>
+
 The official site: <https://github.com/PaulShi666/Mocker/wiki>
 
 ## Features
@@ -14,7 +15,7 @@ The official site: <https://github.com/PaulShi666/Mocker/wiki>
 * using Promise Object,ES6 modules to increase code efficiency
 * separate constant config module so you can pack this tool with your won config
 
-This tool in some way refers to existing Mocking Libraries[nuysoft/Mock](https://github.com/nuysoft/Mock/tree/refactoring),[mennovanslooten/mockJSON](https://github.com/mennovanslooten/mockJSON),[sinonjs/sinon](https://github.com/sinonjs/sinon)
+This tool in some way refers to existing Mocking Libraries [nuysoft/Mock](https://github.com/nuysoft/Mock/tree/refactoring),[mennovanslooten/mockJSON](https://github.com/mennovanslooten/mockJSON),[sinonjs/sinon](https://github.com/sinonjs/sinon)
 
 ## Questions?
 having any questions? please contact me(1976727209@qq.com) or leave your quesion here [New Issue](https://github.com/PaulShi666/Mocker/issues/new).

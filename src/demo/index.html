@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="btn">
+    获取数据
+</button>
+<p id="res"></p>
+
+<script>
+
+//    let target = {};
+//    let p = new Proxy(target, {
+//        get (){
+//            console.log(arguments)
+//        },
+//        set (){
+//            console.log(arguments)
+//        }
+//    });
+//
+//    p.a = 37; // 被转发到代理的操作
+//
+//    console.log(p); // 37. 操作已经被正确地转发
+
+    document.getElementById('btn').addEventListener('click', function (e) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function () {
+            if(this.readyState===4 && this.status===200){
+                document.getElementById('res').innerHTML = this.response;
+            }
+        });
+
+        xhr.open("POST", "/test1");
+
+        xhr.send();
+    })
+</script>
+</body>
+</html>
