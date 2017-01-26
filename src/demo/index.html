@@ -26,19 +26,19 @@
 //
 //    console.log(p); // 37. 操作已经被正确地转发
 
-    document.getElementById('btn').addEventListener('click', function (e) {
-        let xhr = new XMLHttpRequest();
-
-        xhr.addEventListener("readystatechange", function () {
-            if(this.readyState===4 && this.status===200){
-                document.getElementById('res').innerHTML = this.response;
-            }
-        });
-
-        xhr.open("POST", "/test1");
-
-        xhr.send();
-    })
+//    document.getElementById('btn').addEventListener('click', function (e) {
+//        let xhr = new XMLHttpRequest();
+//
+//        xhr.addEventListener("readystatechange", function () {
+//            if(this.readyState===4 && this.status===200){
+//                document.getElementById('res').innerHTML = this.response;
+//            }
+//        });
+//
+//        xhr.open("POST", "/test1");
+//
+//        xhr.send();
+//    })
 </script>
 </body>
 </html>
