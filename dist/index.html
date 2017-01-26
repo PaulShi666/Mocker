@@ -47,11 +47,13 @@
     document.getElementById('btn1').onclick = function (e) {
         e.preventDefault();
         mocker.mock({
-            url:document.getElementById('url0').value,
-            method:document.getElementById('method0').value,
-            response:document.getElementById('response0').value
+            url: document.getElementById('url0').value,
+            method: document.getElementById('method0').value,
+            response: document.getElementById('response0').value
         })
 
+        document.getElementById('url1').value = document.getElementById('url0').value;
+        document.getElementById('url2').value = document.getElementById('method0').value;
 
     }
 
@@ -71,5 +73,5 @@
         xhr.send();
     };
 </script>
-<script type="text/javascript" src="main.ab568809c276ac66b0d3.js"></script></body>
+<script type="text/javascript" src="main.46ab551b37e1a187290b.js"></script></body>
 </html>

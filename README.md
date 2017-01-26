@@ -4,7 +4,9 @@
 Mocker is a simulation tool colletion to increase front-end developers' efficiency including generating mock data,simulating HttpRequest,etc..
 Front-end developer can develop an application using Mocker without running bank-end service.
 
-The api document:<https://github.com/PaulShi666/Mocker/wiki>
+Demo:<https://paulshi666.github.io/Mocker/dist/>
+
+Api document:<https://github.com/PaulShi666/Mocker/wiki>
 
 The official site: <https://paulshi666.github.io/Mocker/>
 
