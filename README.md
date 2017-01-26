@@ -6,7 +6,7 @@ Front-end developer can develop an application using Mocker without running bank
 
 The api document:<https://github.com/PaulShi666/Mocker/wiki>
 
-The official site: <https://github.com/PaulShi666/Mocker/wiki>
+The official site: <https://paulshi666.github.io/Mocker/>
 
 ## Features
 

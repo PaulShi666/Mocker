@@ -11,7 +11,6 @@ function createPrototypeChain() {
     }
 
     if (arguments.length === 1) {
-        console.log(arguments);
         return Object.create(Object.prototype, arguments[0]);
     } else {
         return Object.create(

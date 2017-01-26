@@ -83,7 +83,7 @@ function checkMockerRecord(o) {
         typeof o.url === 'string' &&
         /^(get|post)$/i.test(o.method))
     ) {
-        throw new Error('数据库操作数据非法')
+        throw new Error('数据库mock参数非法')
     }
 }
 
