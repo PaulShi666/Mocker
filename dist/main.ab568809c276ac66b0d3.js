@@ -535,7 +535,7 @@ module.exports = {
 	"main": "index.js",
 	"scripts": {
 		"dev": " NODE_ENV=development webpack-dev-server --config config/webpack.config.js",
-		"build": "NODE_ENV=production webpack --config config/webpack.config.js",
+		"build": "rm -rf dist && NODE_ENV=production webpack --config config/webpack.config.js",
 		"test": "npm run test"
 	},
 	"repository": {

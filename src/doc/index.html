@@ -66,7 +66,7 @@
             }
         });
 
-        xhr.open("POST", "/test1");
+        xhr.open(document.getElementById('method1').value, document.getElementById('url1').value);
 
         xhr.send();
     };
