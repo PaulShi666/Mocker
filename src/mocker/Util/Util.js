@@ -4,7 +4,7 @@
 
 //使用Object.create建立原型链继承关系
 function createPrototypeChain() {
-    console.log(arguments);
+    // console.log(arguments);
     if (typeof arguments[0] !== 'object') {
         console.error('原型链属性为对象类型');
         return;

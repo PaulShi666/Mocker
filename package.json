@@ -6,7 +6,8 @@
   "scripts": {
     "dev": " NODE_ENV=development webpack-dev-server --config config/webpack.config.js",
     "build": "rm -rf dist && NODE_ENV=production webpack --config config/webpack.config.js",
-    "test": "npm run test"
+    "build demo": "rm -rf dist && NODE_ENV=production webpack --config config/webpack.config.js",
+    "build mocker": "rm -rf dist && NODE_ENV=production webpack --config config/webpack.config.js"
   },
   "repository": {
     "type": "git",
