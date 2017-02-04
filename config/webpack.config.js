@@ -6,6 +6,8 @@ const npmPackage = require('../package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// console.log(process);
+
 
 module.exports = {
     entry: {
@@ -28,19 +30,31 @@ module.exports = {
         ]
     },
     devtool: 'cheap-source-map"',
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            sourceMap: true
-        }),
-        // demo页生成
-        new HtmlWebpackPlugin({
-            template: './src/demo/index.html',
-            filename: 'demo/index.html'
-        })
-    ],
+    get plugins() {
+
+        let pluginStack = [
+            // 置入环境变量
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+            }),
+            // demo页生成
+            new HtmlWebpackPlugin({
+                template: './src/demo/index.html',
+                filename: 'demo/index.html'
+            })
+        ];
+
+        if (process.env.NODE_ENV === "production") {
+
+            // 代码压缩
+            pluginStack.push(
+                new webpack.optimize.UglifyJsPlugin({
+                    sourceMap: true
+                }))
+            ;
+        }
+        return pluginStack;
+    },
     devServer: {
         port: 9090
     }

@@ -4,10 +4,8 @@
   "description": "A mock data management tool",
   "main": "index.js",
   "scripts": {
-    "dev": " NODE_ENV=development webpack-dev-server  --config config/webpack.config.js",
+    "dev": " NODE_ENV=development webpack-dev-server --hot  --config config/webpack.config.js",
     "build": "npm run clean && NODE_ENV=production webpack --config config/webpack.config.js",
-    "build demo": "npm run clean && NODE_ENV=production webpack --config config/webpack.config.js",
-    "build mocker": "npm run clean && NODE_ENV=production webpack --config config/webpack.config.js",
     "clean": "rm -rf dist"
   },
   "repository": {
