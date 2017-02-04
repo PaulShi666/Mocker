@@ -33,9 +33,7 @@
     .mocker .mocker-table {
 
     }
-    .mocker .form-add,.mocker .list-panel{
-        display: none;
-    }
+
 </style>
 <script>
 
@@ -52,7 +50,7 @@
         <button class="add">增加</button>
         <button class="list">数据</button>
 
-        <form action="" class="form-add">
+        <form style="display: none" action="" class="form-add">
             <p>
                 <label>
                     <input placeholder="请求路径" type="text" name="url"/>
@@ -74,7 +72,7 @@
             <button class="save">保存</button>
         </form>
 
-        <table class="list-panel">
+        <table style="display: none" class="list-panel">
             <thead>
             <tr>
                 <td>请求路径</td>

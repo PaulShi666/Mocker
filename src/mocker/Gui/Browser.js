@@ -51,23 +51,31 @@ let MockerBrowser = {
 
     },
     switchAdd: function (rootElement, event) {
-        rootElement.querySelector(".form-add").style.display = 'block';
-        rootElement.querySelector(".list-panel").style.display = 'none';
+        if(rootElement.querySelector(".form-add").style.display === 'block'){
+            rootElement.querySelector(".form-add").style.display = 'none';
+        }else{
+            rootElement.querySelector(".form-add").style.display = 'block';
+            rootElement.querySelector(".list-panel").style.display = 'none';
+        }
+
     },
     switchList: function (rootElement) {
         getAllMockerRecord().then(function (items) {
+            if(rootElement.querySelector(".list-panel").style.display === 'block'){
+                rootElement.querySelector(".list-panel").style.display = 'none';
+            }else{
+                rootElement.querySelector(".form-add").style.display = 'none';
+                rootElement.querySelector(".list-panel").style.display = 'block';
 
-            rootElement.querySelector(".form-add").style.display = 'none';
-            rootElement.querySelector(".list-panel").style.display = 'block';
-
-            rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
-                return `<tr>
+                rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
+                    return `<tr>
                                 <td>${ele.url}</td>
                                 <td>${ele.method}</td>
                                 <td>${ele.response}</td>
                             </tr>`
 
-            });
+                });
+            }
 
         });
 
