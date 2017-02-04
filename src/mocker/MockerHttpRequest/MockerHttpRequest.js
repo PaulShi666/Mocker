@@ -101,7 +101,10 @@ function MockerHttpRequest() {
 
 let MockerHttpRequestPrototype = {
     constructor: {
-        value: MockerHttpRequest
+        value: MockerHttpRequest,
+        configurable: true,
+        enumerable: false,
+        writable: true
     },
     DONE: {value: 4},
     HEADERS_RECEIVED: {value: 2},
@@ -335,6 +338,4 @@ MockerHttpRequest.prototype = createPrototypeChain(
 );
 
 
-
-
-export {MockerHttpRequest,resetXMLHttpRequest};
+export {MockerHttpRequest, resetXMLHttpRequest};
