@@ -11,8 +11,10 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 // console.log(process);
 module.exports = {
     entry: {
-        "mocker-min": "./src/mocker",
-        "mocker": "./src/mocker"
+        "mocker-browser": "./src/mocker",
+        "mocker-browser-min": "./src/mocker",
+        "mocker": "./src/mocker/console.js",
+        "mocker-min": "./src/mocker/console.js"
     },
     output: {
         path: 'dist',
@@ -57,7 +59,7 @@ module.exports = {
                 template: './src/demo/index.html',
                 filename: 'demo/index.html',
                 hash: true,
-                chunks:['mocker']
+                chunks:['mocker-browser']
             })
         ];
 
@@ -66,7 +68,7 @@ module.exports = {
             pluginStack.push(
                 new webpack.optimize.UglifyJsPlugin({
                     // 正则匹配压缩版本文件名
-                    include:/^mocker-min\.(\d{1,2}\.)*js$/,
+                    include:/min\.(\d{1,2}\.)*js$/,
                     sourceMap: true
                 }))
             ;
