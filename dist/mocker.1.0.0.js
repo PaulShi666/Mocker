@@ -273,12 +273,17 @@ var MockerBrowser = {
 
         var formElement = rootElement.querySelector('.form-add');
 
-        console.log(formElement.querySelector("input[name=url]").value);
         mocker.mock({
             url: formElement.querySelector("input[name=url]").value,
             method: formElement.querySelector("input[name=method]").value,
             response: formElement.querySelector("input[name=response]").value
         });
+
+        // 保存后开启mocker
+        if (window.mocker.status === 0) {
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+            window.mocker && window.mocker.open();
+        }
     }
 
 };
@@ -890,7 +895,7 @@ Object.keys(_Util).forEach(function (key) {
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form style=\"display: none\" action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"GET\">GET\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"POST\">POST\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table style=\"display: none\" class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
+module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form style=\"display: none\" action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"get\">get\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"post\">post\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table style=\"display: none\" class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
 
 /***/ }),
 /* 11 */

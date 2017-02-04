@@ -82,12 +82,17 @@ let MockerBrowser = {
 
         let formElement = rootElement.querySelector('.form-add');
 
-        console.log(formElement.querySelector("input[name=url]").value);
         mocker.mock({
             url: formElement.querySelector("input[name=url]").value,
             method: formElement.querySelector("input[name=method]").value,
             response: formElement.querySelector("input[name=response]").value
         })
+
+        // 保存后开启mocker
+        if(window.mocker.status===0){
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+            window.mocker && window.mocker.open();
+        }
     }
 
 };
