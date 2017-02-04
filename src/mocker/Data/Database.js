@@ -61,8 +61,9 @@ function getAllMockerRecord(o) {
             if (cursor) {
                 items.push(cursor.value);
                 cursor.continue();
+            }else{
+                resolve(items);
             }
-            resolve(items);
 
         };
     });

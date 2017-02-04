@@ -63,11 +63,34 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Database = __webpack_require__(6);
+
+Object.keys(_Database).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Database[key];
+    }
+  });
+});
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -143,29 +166,6 @@ var HTTP_STATUS_CODES = exports.HTTP_STATUS_CODES = {
 var MOCKER_DATABASE_NAME = exports.MOCKER_DATABASE_NAME = "MockerDatabase";
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Database = __webpack_require__(5);
-
-Object.keys(_Database).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _Database[key];
-    }
-  });
-});
-
-/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -176,7 +176,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _constant = __webpack_require__(0);
+var _constant = __webpack_require__(1);
 
 exports.default = {
     timeout: _constant.MOCKERHTTPREQUEST_DELAY
@@ -190,10 +190,90 @@ exports.default = {
 
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _Browser = __webpack_require__(10);
+
+var _Browser2 = _interopRequireDefault(_Browser);
+
+var _Data = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// 单例模式，因为视图仅出现一次
+
+/**
+ * Created by mac on 17/2/4.
+ */
+
+var MockerBrowser = {
+    init: function init() {
+
+        var rootElement = document.createElement('div');
+        rootElement.className = 'mocker';
+        rootElement.innerHTML = _Browser2.default;
+
+        document.body.appendChild(rootElement);
+
+        // 初始化样式
+        this.setInitialStyle(rootElement);
+
+        // 激活工具面板
+        rootElement.querySelector('.mocker-switch-btn').onclick = this.switchStatus.bind(this, rootElement);
+
+        // 增加数据面板
+        rootElement.querySelector(".mocker-table .add").onclick = this.switchAdd.bind(this, rootElement);
+        // 查看数据列表
+        rootElement.querySelector(".mocker-table .list").onclick = this.switchList.bind(this, rootElement);
+        // 保存新的数据
+        rootElement.querySelector(".mocker-table .save").onclick = this.handleSave.bind(this, rootElement);
+    },
+    setInitialStyle: function setInitialStyle(rootElement) {
+        rootElement.querySelector('.mocker-icon').classList.add('closed');
+    },
+    switchStatus: function switchStatus(rootElement, event) {
+        console.log(arguments);
+    },
+    switchAdd: function switchAdd(event) {
+        console.log(event);
+    },
+    switchList: function switchList(rootElement) {
+        (0, _Data.getAllMockerRecord)().then(function (items) {
+
+            rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
+                return '<tr>\n                                <td>' + ele.url + '</td>\n                                <td>' + ele.method + '</td>\n                                <td>' + ele.response + '</td>\n                            </tr>';
+            });
+        });
+    },
+    handleSave: function handleSave(rootElement, event) {
+        event.preventDefault();
+
+        var formElement = rootElement.querySelector('.form-add');
+
+        console.log(formElement.querySelector("input[name=url]").value);
+        mocker.mock({
+            url: formElement.querySelector("input[name=url]").value,
+            method: formElement.querySelector("input[name=method]").value,
+            response: formElement.querySelector("input[name=response]").value
+        });
+    }
+
+};
+exports.default = MockerBrowser;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _MockerHttpRequest = __webpack_require__(6);
+var _MockerHttpRequest = __webpack_require__(7);
 
 Object.keys(_MockerHttpRequest).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -209,7 +289,7 @@ exports.default = _MockerHttpRequest.MockerHttpRequest; /**
                                                          */
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -240,14 +320,18 @@ module.exports = {
 		"babel-core": "^6.22.1",
 		"babel-loader": "^6.2.10",
 		"babel-preset-es2015": "^6.22.0",
+		"css-loader": "^0.26.1",
+		"file-loader": "^0.10.0",
+		"html-loader": "^0.4.4",
 		"html-webpack-plugin": "^2.26.0",
+		"url-loader": "^0.5.7",
 		"webpack": "^2.2.1",
 		"webpack-dev-server": "^1.16.2"
 	}
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -256,11 +340,11 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.updateMockerRecord = exports.deleteMockerRecord = exports.addMockerRecord = exports.getMockerRecord = exports.createMockerDatabase = undefined;
+exports.updateMockerRecord = exports.deleteMockerRecord = exports.addMockerRecord = exports.getAllMockerRecord = exports.getMockerRecord = exports.createMockerDatabase = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _constant = __webpack_require__(0);
+var _constant = __webpack_require__(1);
 
 var db = void 0;
 
@@ -306,6 +390,24 @@ function getMockerRecord(o) {
         };
     });
 }
+function getAllMockerRecord(o) {
+    var items = [];
+
+    var objectStore = db.transaction("records", "readonly").objectStore("records");
+
+    return new Promise(function (resolve, reject) {
+        // 使用游标查询所有的数据
+        objectStore.openCursor().onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor) {
+                items.push(cursor.value);
+                cursor.continue();
+            } else {
+                resolve(items);
+            }
+        };
+    });
+}
 function addMockerRecord(o) {
 
     checkMockerRecord(o);
@@ -335,12 +437,13 @@ function checkMockerRecord(o) {
 
 exports.createMockerDatabase = createMockerDatabase;
 exports.getMockerRecord = getMockerRecord;
+exports.getAllMockerRecord = getAllMockerRecord;
 exports.addMockerRecord = addMockerRecord;
 exports.deleteMockerRecord = deleteMockerRecord;
 exports.updateMockerRecord = updateMockerRecord;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -351,15 +454,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.resetXMLHttpRequest = exports.MockerHttpRequest = undefined;
 
-var _util = __webpack_require__(8);
+var _util = __webpack_require__(9);
 
-var _constant = __webpack_require__(0);
+var _constant = __webpack_require__(1);
 
 var _config = __webpack_require__(2);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _Data = __webpack_require__(1);
+var _Data = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -684,7 +787,7 @@ exports.MockerHttpRequest = MockerHttpRequest;
 exports.resetXMLHttpRequest = resetXMLHttpRequest;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -724,7 +827,7 @@ exports.createPrototypeChain = createPrototypeChain;
 exports.getVariableType = getVariableType;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -734,7 +837,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Util = __webpack_require__(7);
+var _Util = __webpack_require__(8);
 
 Object.keys(_Util).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
@@ -747,7 +850,13 @@ Object.keys(_Util).forEach(function (key) {
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon.closed {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"GET\">GET\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"POST\">POST\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table>\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -757,7 +866,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _package = __webpack_require__(4);
+var _package = __webpack_require__(5);
 
 var npmPackage = _interopRequireWildcard(_package);
 
@@ -765,19 +874,19 @@ var _config = __webpack_require__(2);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _Data = __webpack_require__(1);
+var _Data = __webpack_require__(0);
 
-var _MockerHttpRequest = __webpack_require__(3);
+var _MockerHttpRequest = __webpack_require__(4);
+
+var _Browser = __webpack_require__(3);
+
+var _Browser2 = _interopRequireDefault(_Browser);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // 初始化Mocker
-/**
- * Created by mac on 17/1/17.
- */
-
 var mocker = {
     close: _MockerHttpRequest.resetXMLHttpRequest,
     config: _config2.default,
@@ -788,6 +897,10 @@ var mocker = {
 };
 
 // 修改原生的XMLHttpRequest
+/**
+ * Created by mac on 17/1/17.
+ */
+
 if (window.XMLHttpRequest) {
     window.XMLHttpRequest = _MockerHttpRequest.MockerHttpRequest;
 }
@@ -801,7 +914,14 @@ if (!window.mocker || window.mocker.version !== mocker.version) {
 try {
     (0, _Data.createMockerDatabase)();
 } catch (e) {
-    console.log(e);
+    console.log('初始化Mocker数据库失败', e);
+}
+
+// 初始化MockerBrowser
+try {
+    _Browser2.default.init();
+} catch (e) {
+    console.log('初始化MockerGui失败', e);
 }
 
 exports.default = mocker;
