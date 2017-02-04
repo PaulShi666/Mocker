@@ -12,9 +12,24 @@ const _XMLHttpRequest = window.XMLHttpRequest;
 //保存原生ActiveXObject
 const _ActiveXObject = window.ActiveXObject;
 
+// 修改原生的XMLHttpRequest
+function replaceXMLHttpRequest() {
+    if (window.XMLHttpRequest) {
+        window.XMLHttpRequest = MockerHttpRequest;
+    }
+    if(window.mocker){
+        window.mocker.status = 1;
+    }
+}
+// 恢复原生的XMLHttpRequest
 function resetXMLHttpRequest() {
     window.XMLHttpRequest = _XMLHttpRequest;
+    window.ActiveXObject = _ActiveXObject;
+    if(window.mocker){
+        window.mocker.status = 0;
+    }
 }
+
 
 //自定义XHR对象构造器
 function MockerHttpRequest() {
@@ -344,4 +359,4 @@ MockerHttpRequest.prototype = createPrototypeChain(
 );
 
 
-export {MockerHttpRequest, resetXMLHttpRequest};
+export {MockerHttpRequest, replaceXMLHttpRequest, resetXMLHttpRequest};

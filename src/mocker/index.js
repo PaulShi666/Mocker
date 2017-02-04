@@ -8,13 +8,16 @@ import mockerConfig from './config';
 import {createMockerDatabase, addMockerRecord} from './Data';
 import {
     MockerHttpRequest,
+    replaceXMLHttpRequest,
     resetXMLHttpRequest,
 } from './MockerHttpRequest';
 import  MockerBrowser from './Gui/Browser';
 
 // 初始化Mocker
 const mocker = {
+    open:replaceXMLHttpRequest,
     close: resetXMLHttpRequest,
+    status:0,
     config: mockerConfig,
     version: npmPackage.version,
     mock: function () {
@@ -22,10 +25,6 @@ const mocker = {
     }
 };
 
-// 修改原生的XMLHttpRequest
-if (window.XMLHttpRequest) {
-    window.XMLHttpRequest = MockerHttpRequest;
-}
 
 // 给window对象增加mocker接口
 if (!window.mocker || window.mocker.version !== mocker.version) {

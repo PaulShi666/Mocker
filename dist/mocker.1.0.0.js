@@ -230,16 +230,31 @@ var MockerBrowser = {
         rootElement.querySelector(".mocker-table .save").onclick = this.handleSave.bind(this, rootElement);
     },
     setInitialStyle: function setInitialStyle(rootElement) {
-        rootElement.querySelector('.mocker-icon').classList.add('closed');
+        if (window.mocker.status === 0) {
+            rootElement.querySelector('.mocker-icon').classList.remove('opened');
+        } else if (window.mocker.status === 1) {
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+        }
     },
     switchStatus: function switchStatus(rootElement, event) {
-        console.log(arguments);
+
+        if (window.mocker.status === 0) {
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+            window.mocker && window.mocker.open();
+        } else if (window.mocker.status === 1) {
+            rootElement.querySelector('.mocker-icon').classList.remove('opened');
+            window.mocker && window.mocker.close();
+        }
     },
-    switchAdd: function switchAdd(event) {
-        console.log(event);
+    switchAdd: function switchAdd(rootElement, event) {
+        rootElement.querySelector(".form-add").style.display = 'block';
+        rootElement.querySelector(".list-panel").style.display = 'none';
     },
     switchList: function switchList(rootElement) {
         (0, _Data.getAllMockerRecord)().then(function (items) {
+
+            rootElement.querySelector(".form-add").style.display = 'none';
+            rootElement.querySelector(".list-panel").style.display = 'block';
 
             rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
                 return '<tr>\n                                <td>' + ele.url + '</td>\n                                <td>' + ele.method + '</td>\n                                <td>' + ele.response + '</td>\n                            </tr>';
@@ -452,7 +467,7 @@ exports.updateMockerRecord = updateMockerRecord;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.resetXMLHttpRequest = exports.MockerHttpRequest = undefined;
+exports.resetXMLHttpRequest = exports.replaceXMLHttpRequest = exports.MockerHttpRequest = undefined;
 
 var _util = __webpack_require__(9);
 
@@ -475,8 +490,22 @@ var _XMLHttpRequest = window.XMLHttpRequest;
 //保存原生ActiveXObject
 var _ActiveXObject = window.ActiveXObject;
 
+// 修改原生的XMLHttpRequest
+function replaceXMLHttpRequest() {
+    if (window.XMLHttpRequest) {
+        window.XMLHttpRequest = MockerHttpRequest;
+    }
+    if (window.mocker) {
+        window.mocker.status = 1;
+    }
+}
+// 恢复原生的XMLHttpRequest
 function resetXMLHttpRequest() {
     window.XMLHttpRequest = _XMLHttpRequest;
+    window.ActiveXObject = _ActiveXObject;
+    if (window.mocker) {
+        window.mocker.status = 0;
+    }
 }
 
 //自定义XHR对象构造器
@@ -784,6 +813,7 @@ function find(o) {
 MockerHttpRequest.prototype = (0, _util.createPrototypeChain)(MockerHttpRequestPrototype, MockXMLHttpRequestEventTargetPrototype, MockEventTargetPrototype);
 
 exports.MockerHttpRequest = MockerHttpRequest;
+exports.replaceXMLHttpRequest = replaceXMLHttpRequest;
 exports.resetXMLHttpRequest = resetXMLHttpRequest;
 
 /***/ }),
@@ -853,7 +883,7 @@ Object.keys(_Util).forEach(function (key) {
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon.closed {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"GET\">GET\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"POST\">POST\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table>\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
+module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n    .mocker .form-add,.mocker .list-panel{\n        display: none;\n    }\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"GET\">GET\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"POST\">POST\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
 
 /***/ }),
 /* 11 */
@@ -888,7 +918,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 // 初始化Mocker
 var mocker = {
+    open: _MockerHttpRequest.replaceXMLHttpRequest,
     close: _MockerHttpRequest.resetXMLHttpRequest,
+    status: 0,
     config: _config2.default,
     version: npmPackage.version,
     mock: function mock() {
@@ -896,16 +928,11 @@ var mocker = {
     }
 };
 
-// 修改原生的XMLHttpRequest
+// 给window对象增加mocker接口
 /**
  * Created by mac on 17/1/17.
  */
 
-if (window.XMLHttpRequest) {
-    window.XMLHttpRequest = _MockerHttpRequest.MockerHttpRequest;
-}
-
-// 给window对象增加mocker接口
 if (!window.mocker || window.mocker.version !== mocker.version) {
     window.mocker = mocker;
 }

@@ -30,16 +30,35 @@ let MockerBrowser = {
         rootElement.querySelector(".mocker-table .save").onclick = this.handleSave.bind(this, rootElement);
     },
     setInitialStyle: function (rootElement) {
-        rootElement.querySelector('.mocker-icon').classList.add('closed');
+        if(window.mocker.status===0){
+            rootElement.querySelector('.mocker-icon').classList.remove('opened');
+
+        }else if(window.mocker.status ===1){
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+        }
+
     },
     switchStatus: function (rootElement, event) {
-        console.log(arguments)
+
+        if(window.mocker.status===0){
+            rootElement.querySelector('.mocker-icon').classList.add('opened');
+            window.mocker && window.mocker.open();
+
+        }else if(window.mocker.status ===1){
+            rootElement.querySelector('.mocker-icon').classList.remove('opened');
+            window.mocker && window.mocker.close();
+        }
+
     },
-    switchAdd: function (event) {
-        console.log(event)
+    switchAdd: function (rootElement, event) {
+        rootElement.querySelector(".form-add").style.display = 'block';
+        rootElement.querySelector(".list-panel").style.display = 'none';
     },
     switchList: function (rootElement) {
         getAllMockerRecord().then(function (items) {
+
+            rootElement.querySelector(".form-add").style.display = 'none';
+            rootElement.querySelector(".list-panel").style.display = 'block';
 
             rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
                 return `<tr>
