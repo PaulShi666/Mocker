@@ -6,11 +6,12 @@ const npmPackage = require('../package.json');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const PRODUCTION = process.env.NODE_ENV === 'production';
+
 // console.log(process);
-
-
 module.exports = {
     entry: {
+        "mocker-min": "./src/mocker",
         "mocker": "./src/mocker"
     },
     output: {
@@ -29,9 +30,8 @@ module.exports = {
             }
         ]
     },
-    devtool: 'cheap-source-map"',
+    devtool: 'source-map"',
     get plugins() {
-
         let pluginStack = [
             // 置入环境变量
             new webpack.DefinePlugin({
@@ -44,11 +44,12 @@ module.exports = {
             })
         ];
 
-        if (process.env.NODE_ENV === "production") {
-
+        if (PRODUCTION) {
             // 代码压缩
             pluginStack.push(
                 new webpack.optimize.UglifyJsPlugin({
+                    // 正则匹配压缩版本文件名
+                    include:/^mocker-min\.(\d{1,2}\.)*js$/,
                     sourceMap: true
                 }))
             ;
@@ -59,3 +60,4 @@ module.exports = {
         port: 9090
     }
 };
+
