@@ -73,12 +73,9 @@ let MockerBrowser = {
                                 <td>${ele.method}</td>
                                 <td>${ele.response}</td>
                             </tr>`
-
                 });
             }
-
         });
-
     },
     handleSave: function (rootElement, event) {
         event.preventDefault();
