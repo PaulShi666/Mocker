@@ -254,7 +254,10 @@ function MockXMLHttpRequestEventTarget() {
 
 let MockXMLHttpRequestEventTargetPrototype = {
     constructor: {
-        value: MockXMLHttpRequestEventTarget
+        value: MockXMLHttpRequestEventTarget,
+        configurable: true,
+        enumerable: false,
+        writable: true
     },
     onabort: {},
     onerror: {},
@@ -269,7 +272,10 @@ function MockEventTarget() {
 }
 let MockEventTargetPrototype = {
     constructor: {
-        value: MockEventTarget
+        value: MockEventTarget,
+        configurable: true,
+        enumerable: false,
+        writable: true
     },
     addEventListener: {
         value: function (type, callback) {
