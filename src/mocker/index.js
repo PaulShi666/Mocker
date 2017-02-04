@@ -10,6 +10,7 @@ import {
     MockerHttpRequest,
     resetXMLHttpRequest,
 } from './MockerHttpRequest';
+import MockerBrowser from './Gui';
 
 // 初始化Mocker
 const mocker = {
@@ -35,7 +36,16 @@ if (!window.mocker || window.mocker.version !== mocker.version) {
 try {
     createMockerDatabase();
 } catch (e) {
-    console.log(e);
+    console.log('初始化Mocker数据库失败',e);
 }
+
+// 初始化MockerGui
+try {
+    MockerBrowser.init();
+} catch (e) {
+    console.log('初始化MockerGui失败',e);
+}
+
+
 
 export default mocker
