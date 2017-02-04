@@ -15,7 +15,7 @@ The official site: <https://paulshi666.github.io/Mocker/>
 * can save numerous mock data Using IndexedDB Database
 * accurately simulate ajax requests(timeout,readystate,status...etc)
 * using Promise Object,ES6 modules to increase code efficiency
-* separate constant config module so you can pack this tool with your won config
+* separate constant config module so you can pack this tool with your own config
 
 This tool in some way refers to existing Mocking Libraries [nuysoft/Mock](https://github.com/nuysoft/Mock/tree/refactoring),[mennovanslooten/mockJSON](https://github.com/mennovanslooten/mockJSON),[sinonjs/sinon](https://github.com/sinonjs/sinon)
 
