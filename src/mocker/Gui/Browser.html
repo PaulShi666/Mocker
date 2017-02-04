@@ -1,6 +1,87 @@
-<div>
-    <button></button>
-    <div class="panel">
+<style>
+    .mocker {
 
+    }
+
+    .mocker .mocker-container {
+        border-radius: 10px;
+        position: fixed;
+        background: #F0F0F0;
+        right: 10px;
+        top: 10px;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .mocker .mocker-icon.closed {
+        fill: #334ff9;
+    }
+
+    .mocker .mocker-icon.opened {
+        fill: #fd0000;
+    }
+
+    .mocker .mocker-switch-btn {
+        border: none;
+        background: transparent;
+
+        padding: 5px 10px;
+        margin: 0;
+        outline: none;
+    }
+
+    .mocker .mocker-table {
+
+    }
+</style>
+<script>
+
+</script>
+<div class="mocker-container">
+    <button class="mocker-switch-btn">
+        <svg class="mocker-icon" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+            <path d="M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z"></path>
+        </svg>
+    </button>
+    <div class="mocker-table">
+
+        <button class="add">增加</button>
+        <button class="list">数据</button>
+
+        <form action="" class="form-add">
+            <p>
+                <label>
+                    <input placeholder="请求路径" type="text" name="url"/>
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="radio" name="method" value="GET">GET
+                </label>
+                <label>
+                    <input type="radio" name="method" value="POST">POST
+                </label>
+            </p>
+
+            <p>
+                <input placeholder="响应数据" name="response" type="text">
+            </p>
+
+            <button class="save">保存</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <td>请求路径</td>
+                <td>请求方式</td>
+                <td>响应数据</td>
+            </tr>
+            </thead>
+            <tbody class="mocker-list">
+
+            </tbody>
+        </table>
     </div>
 </div>

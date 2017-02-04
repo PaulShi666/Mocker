@@ -10,7 +10,7 @@ import {
     MockerHttpRequest,
     resetXMLHttpRequest,
 } from './MockerHttpRequest';
-import MockerBrowser from './Gui';
+import  MockerBrowser from './Gui/Browser';
 
 // 初始化Mocker
 const mocker = {
@@ -39,7 +39,7 @@ try {
     console.log('初始化Mocker数据库失败',e);
 }
 
-// 初始化MockerGui
+// 初始化MockerBrowser
 try {
     MockerBrowser.init();
 } catch (e) {

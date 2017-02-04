@@ -49,6 +49,24 @@ function getMockerRecord(o) {
 
 
 }
+function getAllMockerRecord(o) {
+    let items = [];
+
+    let objectStore = db.transaction("records", "readonly").objectStore("records");
+
+    return new Promise(function (resolve, reject) {
+        // 使用游标查询所有的数据
+        objectStore.openCursor().onsuccess = function (event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                items.push(cursor.value);
+                cursor.continue();
+            }
+            resolve(items);
+
+        };
+    });
+}
 function addMockerRecord(o) {
 
     checkMockerRecord(o);
@@ -90,6 +108,7 @@ function checkMockerRecord(o) {
 export {
     createMockerDatabase,
     getMockerRecord,
+    getAllMockerRecord,
     addMockerRecord,
     deleteMockerRecord,
     updateMockerRecord

@@ -34,9 +34,14 @@ module.exports = {
                 loader: 'html-loader'
             },
             {
-                test: /\.css/,
+                test: /\.css$/,
                 include: /src/,
                 loader: 'css-loader'
+            },
+            {
+                test: /\.(svg|jpg|png)$/,
+                include: /src/,
+                loader: 'url-loader?limit=50000&name=[path][name].[ext]'
             }
         ]
     },
@@ -50,7 +55,9 @@ module.exports = {
             // demo页生成
             new HtmlWebpackPlugin({
                 template: './src/demo/index.html',
-                filename: 'demo/index.html'
+                filename: 'demo/index.html',
+                hash: true,
+                chunks:['mocker']
             })
         ];
 
