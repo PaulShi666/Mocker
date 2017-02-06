@@ -25,7 +25,6 @@ const mocker = {
     }
 };
 
-
 // 给window对象增加mocker接口
 if (!window.mocker || window.mocker.version !== mocker.version) {
     window.mocker = mocker;
@@ -44,7 +43,5 @@ try {
 } catch (e) {
     console.log('初始化MockerGui失败',e);
 }
-
-
 
 export default mocker
