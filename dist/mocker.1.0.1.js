@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -214,7 +214,7 @@ exports.default = _MockerHttpRequest.MockerHttpRequest; /**
 
 module.exports = {
 	"name": "Mocker",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A mock data management tool",
 	"main": "index.js",
 	"scripts": {
@@ -795,136 +795,9 @@ Object.keys(_Util).forEach(function (key) {
 });
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _Browser = __webpack_require__(10);
-
-var _Browser2 = _interopRequireDefault(_Browser);
-
-var _Data = __webpack_require__(0);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// 单例模式，因为视图仅出现一次
-
-/**
- * Created by mac on 17/2/4.
- */
-
-var MockerBrowser = {
-    init: function init() {
-
-        var rootElement = document.createElement('div');
-        rootElement.className = 'mocker';
-        rootElement.innerHTML = _Browser2.default;
-
-        document.body.appendChild(rootElement);
-
-        // 初始化样式
-        this.setInitialStyle(rootElement);
-
-        // 激活工具面板
-        rootElement.querySelector('.mocker-switch-btn').onclick = this.switchStatus.bind(this, rootElement);
-
-        // 增加数据面板
-        rootElement.querySelector(".mocker-table .add").onclick = this.switchAdd.bind(this, rootElement);
-        // 查看数据列表
-        rootElement.querySelector(".mocker-table .list").onclick = this.switchList.bind(this, rootElement);
-        // 保存新的数据
-        rootElement.querySelector(".mocker-table .save").onclick = this.handleSave.bind(this, rootElement);
-    },
-    setInitialStyle: function setInitialStyle(rootElement) {
-        if (window.mocker.status === 0) {
-            rootElement.querySelector('.mocker-icon').classList.remove('opened');
-        } else if (window.mocker.status === 1) {
-            rootElement.querySelector('.mocker-icon').classList.add('opened');
-        }
-    },
-    switchStatus: function switchStatus(rootElement, event) {
-
-        if (window.mocker.status === 0) {
-            rootElement.querySelector('.mocker-icon').classList.add('opened');
-            window.mocker && window.mocker.open();
-        } else if (window.mocker.status === 1) {
-            rootElement.querySelector('.mocker-icon').classList.remove('opened');
-            window.mocker && window.mocker.close();
-        }
-    },
-    switchAdd: function switchAdd(rootElement, event) {
-        if (rootElement.querySelector(".form-add").style.display === 'block') {
-            rootElement.querySelector(".form-add").style.display = 'none';
-        } else {
-            rootElement.querySelector(".form-add").style.display = 'block';
-            rootElement.querySelector(".list-panel").style.display = 'none';
-        }
-    },
-    switchList: function switchList(rootElement) {
-        var that = this;
-
-        (0, _Data.getAllMockerRecord)().then(function (items) {
-            if (rootElement.querySelector(".list-panel").style.display === 'block') {
-                rootElement.querySelector(".list-panel").style.display = 'none';
-            } else {
-                rootElement.querySelector(".form-add").style.display = 'none';
-                rootElement.querySelector(".list-panel").style.display = 'block';
-
-                rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
-                    return '<tr>\n                                \n                                <td>' + ele.url + '</td>\n                                <td>' + ele.method + '</td>\n                                <td>' + ele.response + '</td>\n                                <td><button data-id="' + ele.id + '"  class="delete ">\u5220\u9664</button></td>\n                            </tr>';
-                }).join('');
-
-                rootElement.querySelectorAll('.delete').forEach(function (node) {
-                    node.addEventListener('click', function (e) {
-                        var that = this;
-
-                        (0, _Data.deleteMockerRecord)({
-                            id: Number(e.target.dataset.id)
-                        }).then(function (res) {
-                            document.querySelector('.mocker-list').removeChild(that.parentNode.parentNode);
-                            console.log(res);
-                        });
-                    });
-                });
-            }
-        });
-    },
-    handleSave: function handleSave(rootElement, event) {
-        event.preventDefault();
-
-        var formElement = rootElement.querySelector('.form-add');
-
-        mocker.mock({
-            url: formElement.querySelector("input[name=url]").value,
-            method: formElement.querySelector("input[name=method]").value,
-            response: formElement.querySelector("input[name=response]").value
-        });
-
-        // 保存后开启mocker
-        if (window.mocker.status === 0) {
-            rootElement.querySelector('.mocker-icon').classList.add('opened');
-            window.mocker && window.mocker.open();
-        }
-    }
-
-};
-exports.default = MockerBrowser;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form style=\"display: none\" action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"get\">get\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"post\">post\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table style=\"display: none\" class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>路径</td>\n                <td>方式</td>\n                <td>响应</td>\n                <td>操作</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
-
-/***/ }),
-/* 11 */,
-/* 12 */
+/* 9 */,
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -946,15 +819,15 @@ var _Data = __webpack_require__(0);
 
 var _MockerHttpRequest = __webpack_require__(3);
 
-var _Browser = __webpack_require__(9);
-
-var _Browser2 = _interopRequireDefault(_Browser);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // 初始化Mocker
+/**
+ * Created by mac on 17/1/17.
+ */
+
 var mocker = {
     open: _MockerHttpRequest.replaceXMLHttpRequest,
     close: _MockerHttpRequest.resetXMLHttpRequest,
@@ -967,10 +840,6 @@ var mocker = {
 };
 
 // 给window对象增加mocker接口
-/**
- * Created by mac on 17/1/17.
- */
-
 if (!window.mocker || window.mocker.version !== mocker.version) {
     window.mocker = mocker;
 }
@@ -982,15 +851,8 @@ try {
     console.log('初始化Mocker数据库失败', e);
 }
 
-// 初始化MockerBrowser
-try {
-    _Browser2.default.init();
-} catch (e) {
-    console.log('初始化MockerGui失败', e);
-}
-
 exports.default = mocker;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=mocker-browser.1.0.0.js.map
+//# sourceMappingURL=mocker.1.0.1.js.map
