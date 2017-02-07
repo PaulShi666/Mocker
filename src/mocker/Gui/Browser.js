@@ -3,7 +3,7 @@
  */
 
 import browserHtml from './Browser.html';
-import {getAllMockerRecord} from '../Data';
+import {getAllMockerRecord,deleteMockerRecord} from '../Data';
 
 // 单例模式，因为视图仅出现一次
 
@@ -60,6 +60,8 @@ let MockerBrowser = {
 
     },
     switchList: function (rootElement) {
+        let that = this;
+
         getAllMockerRecord().then(function (items) {
             if(rootElement.querySelector(".list-panel").style.display === 'block'){
                 rootElement.querySelector(".list-panel").style.display = 'none';
@@ -69,11 +71,32 @@ let MockerBrowser = {
 
                 rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
                     return `<tr>
+                                
                                 <td>${ele.url}</td>
                                 <td>${ele.method}</td>
                                 <td>${ele.response}</td>
+                                <td><button data-id="${ele.id}"  class="delete ">删除</button></td>
                             </tr>`
-                });
+                }).join('');
+
+
+
+                rootElement.querySelectorAll('.delete').forEach(function (node) {
+                    node.addEventListener('click',function (e) {
+                        let that = this;
+
+
+
+                        deleteMockerRecord({
+                            id:Number(e.target.dataset.id)
+                        }).then(function (res){
+                            document.querySelector('.mocker-list').removeChild(that.parentNode.parentNode);
+                            console.log(res)
+                        })
+                    })
+                })
+
+
             }
         });
     },

@@ -88,6 +88,16 @@ function addMockerRecord(o) {
 }
 
 function deleteMockerRecord(o) {
+    console.log(o.id);
+
+    let objectStore = db.transaction("records", "readwrite").objectStore("records");
+
+    return new Promise(function (resolve, reject) {
+        // 根据索引查询
+        objectStore.delete(o.id).onsuccess = function (e) {
+            resolve(true);
+        }
+    });
 
 }
 
