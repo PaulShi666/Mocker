@@ -344,7 +344,18 @@ function addMockerRecord(o) {
     };
 }
 
-function deleteMockerRecord(o) {}
+function deleteMockerRecord(o) {
+    console.log(o.id);
+
+    var objectStore = db.transaction("records", "readwrite").objectStore("records");
+
+    return new Promise(function (resolve, reject) {
+        // 根据索引查询
+        objectStore.delete(o.id).onsuccess = function (e) {
+            resolve(true);
+        };
+    });
+}
 
 function updateMockerRecord(o) {}
 
@@ -548,7 +559,6 @@ var MockerHttpRequestPrototype = {
 
                 if (!item) {
                     //在Mock记录中没有查询到
-
 
                 } else {
                     //在Mock记录中查询到

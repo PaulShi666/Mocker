@@ -344,7 +344,18 @@ function addMockerRecord(o) {
     };
 }
 
-function deleteMockerRecord(o) {}
+function deleteMockerRecord(o) {
+    console.log(o.id);
+
+    var objectStore = db.transaction("records", "readwrite").objectStore("records");
+
+    return new Promise(function (resolve, reject) {
+        // 根据索引查询
+        objectStore.delete(o.id).onsuccess = function (e) {
+            resolve(true);
+        };
+    });
+}
 
 function updateMockerRecord(o) {}
 
@@ -548,7 +559,6 @@ var MockerHttpRequestPrototype = {
 
                 if (!item) {
                     //在Mock记录中没有查询到
-
 
                 } else {
                     //在Mock记录中查询到
@@ -857,6 +867,8 @@ var MockerBrowser = {
         }
     },
     switchList: function switchList(rootElement) {
+        var that = this;
+
         (0, _Data.getAllMockerRecord)().then(function (items) {
             if (rootElement.querySelector(".list-panel").style.display === 'block') {
                 rootElement.querySelector(".list-panel").style.display = 'none';
@@ -865,7 +877,20 @@ var MockerBrowser = {
                 rootElement.querySelector(".list-panel").style.display = 'block';
 
                 rootElement.querySelector('.mocker-list').innerHTML = items.map(function (ele, index, array) {
-                    return '<tr>\n                                <td>' + ele.url + '</td>\n                                <td>' + ele.method + '</td>\n                                <td>' + ele.response + '</td>\n                            </tr>';
+                    return '<tr>\n                                \n                                <td>' + ele.url + '</td>\n                                <td>' + ele.method + '</td>\n                                <td>' + ele.response + '</td>\n                                <td><button data-id="' + ele.id + '"  class="delete ">\u5220\u9664</button></td>\n                            </tr>';
+                }).join('');
+
+                rootElement.querySelectorAll('.delete').forEach(function (node) {
+                    node.addEventListener('click', function (e) {
+                        var that = this;
+
+                        (0, _Data.deleteMockerRecord)({
+                            id: Number(e.target.dataset.id)
+                        }).then(function (res) {
+                            document.querySelector('.mocker-list').removeChild(that.parentNode.parentNode);
+                            console.log(res);
+                        });
+                    });
                 });
             }
         });
@@ -895,7 +920,7 @@ exports.default = MockerBrowser;
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form style=\"display: none\" action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"get\">get\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"post\">post\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table style=\"display: none\" class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>请求路径</td>\n                <td>请求方式</td>\n                <td>响应数据</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
+module.exports = "<style>\n    .mocker {\n\n    }\n\n    .mocker .mocker-container {\n        border-radius: 10px;\n        position: fixed;\n        background: #F0F0F0;\n        right: 10px;\n        top: 10px;\n        text-align: center;\n        padding: 5px;\n    }\n\n    .mocker .mocker-icon {\n        fill: #334ff9;\n    }\n\n    .mocker .mocker-icon.opened {\n        fill: #fd0000;\n    }\n\n    .mocker .mocker-switch-btn {\n        border: none;\n        background: transparent;\n\n        padding: 5px 10px;\n        margin: 0;\n        outline: none;\n    }\n\n    .mocker .mocker-table {\n\n    }\n\n</style>\n<script>\n\n</script>\n<div class=\"mocker-container\">\n    <button class=\"mocker-switch-btn\">\n        <svg class=\"mocker-icon\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n             xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"32\" height=\"32\" viewBox=\"0 0 32 32\">\n            <path d=\"M22 2l-10 10h-6l-6 8c0 0 6.357-1.77 10.065-0.94l-10.065 12.94 13.184-10.255c1.839 4.208-1.184 10.255-1.184 10.255l8-6v-6l10-10 2-10-10 2z\"></path>\n        </svg>\n    </button>\n    <div class=\"mocker-table\">\n\n        <button class=\"add\">增加</button>\n        <button class=\"list\">数据</button>\n\n        <form style=\"display: none\" action=\"\" class=\"form-add\">\n            <p>\n                <label>\n                    <input placeholder=\"请求路径\" type=\"text\" name=\"url\"/>\n                </label>\n            </p>\n            <p>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"get\">get\n                </label>\n                <label>\n                    <input type=\"radio\" name=\"method\" value=\"post\">post\n                </label>\n            </p>\n\n            <p>\n                <input placeholder=\"响应数据\" name=\"response\" type=\"text\">\n            </p>\n\n            <button class=\"save\">保存</button>\n        </form>\n\n        <table style=\"display: none\" class=\"list-panel\">\n            <thead>\n            <tr>\n                <td>路径</td>\n                <td>方式</td>\n                <td>响应</td>\n                <td>操作</td>\n            </tr>\n            </thead>\n            <tbody class=\"mocker-list\">\n\n            </tbody>\n        </table>\n    </div>\n</div>\n";
 
 /***/ }),
 /* 11 */,
